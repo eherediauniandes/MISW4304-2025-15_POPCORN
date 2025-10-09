@@ -2,7 +2,7 @@ from flask import Flask, Blueprint
 from flask_restful import Api
 
 from .api.config import config_by_name
-from .api.extensions import db
+from .api.extensions import db, jwt
 from .api.routes import register_resources
 
 def create_api_blueprint() -> Blueprint:
@@ -17,6 +17,7 @@ def create_app(config_name="development"):
     app.config.from_object(config_by_name[config_name])
 
     db.init_app(app)
+    jwt.init_app(app)
 
     app.register_blueprint(create_api_blueprint())
 
