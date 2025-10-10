@@ -2,7 +2,6 @@ from sqlalchemy import Column, String, DateTime
 from datetime import datetime
 from ..api.extensions import db
 
-
 class Blacklist(db.Model):
     __tablename__ = 'blacklist'
     
