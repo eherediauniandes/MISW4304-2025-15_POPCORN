@@ -1,15 +1,13 @@
 from sqlalchemy import Column, String, DateTime
-from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
-import uuid
+from ..api.extensions import db
 
-Base = declarative_base()
 
-class Blacklist(Base):
+class Blacklist(db.Model):
     __tablename__ = 'blacklist'
     
     email = Column(String(255), primary_key=True, nullable=False)
-    app_uuid = Column(String(36), nullable=False, nullable=False)
+    app_uuid = Column(String(36), nullable=False)
     blocked_reason = Column(String(500), nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
