@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "cf044eff-bca5-498a-be86-f368c98d0ea2",
+		"_postman_id": "a1f0c1b9-7f74-4656-939f-7d8132058fab",
 		"name": "DevOps",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "41769426"
+		"_exporter_id": "47549940"
 	},
 	"item": [
 		{
@@ -26,8 +26,27 @@
 		{
 			"name": "Create",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{email}}\",\n    \"app_uuid\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"blocked_reason\": \"Comportamiento sospechoso\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "{{url}}/blacklists",
 					"host": [
@@ -43,16 +62,26 @@
 		{
 			"name": "Get",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/blacklists/email",
+					"raw": "{{url}}/blacklists/{{email}}",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"blacklists",
-						"email"
+						"{{email}}"
 					]
 				}
 			},
