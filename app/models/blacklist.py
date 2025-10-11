@@ -1,23 +1,22 @@
 from sqlalchemy import Column, String, DateTime
-from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
-import uuid
+from ..api.extensions import db
 
-Base = declarative_base()
-
-class Blacklist(Base):
+class Blacklist(db.Model):
     __tablename__ = 'blacklist'
     
     email = Column(String(255), primary_key=True, nullable=False)
-    app_uuid = Column(String(36), nullable=False, nullable=False)
-    blocked_reason = Column(String(500), nullable=False)
+    app_uuid = Column(String(36), nullable=False)
+    blocked_reason = Column(String(255), nullable=True)
+    ip_address = Column(String(45), nullable=True)  # 45 caracteres para IPv6
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
-    def __init__(self, email, app_uuid, blocked_reason):
+    def __init__(self, email, app_uuid, blocked_reason, ip_address=None):
         self.email = email
         self.app_uuid = app_uuid
         self.blocked_reason = blocked_reason
+        self.ip_address = ip_address
     
     def __repr__(self):
         return f'<Blacklist(email="{self.email}", app_uuid="{self.app_uuid}", blocked_reason="{self.blocked_reason}")>'
@@ -28,6 +27,7 @@ class Blacklist(Base):
             'email': self.email,
             'app_uuid': self.app_uuid,
             'blocked_reason': self.blocked_reason,
+            'ip_address': self.ip_address,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None
         }
