@@ -1,0 +1,23 @@
+{
+  "id": "aws-environment",
+  "name": "AWS Production Environment",
+  "values": [
+    {
+      "key": "url",
+      "value": "http://MISW4304-2025-15POPCORN-env.eba-38ya8tke.us-east-1.elasticbeanstalk.com",
+      "enabled": true
+    },
+    {
+      "key": "token",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoic3RhdGljLXVzZXIiLCJyb2xlIjoiYWRtaW4ifQ.6bUHdYJk1cRnn-SVZEXAMPLEpR0fZ2mJb_YWbl8pW1lM",
+      "enabled": true
+    },
+    {
+      "key": "email",
+      "value": "newman-test@example.com",
+      "enabled": true
+    }
+  ],
+  "_postman_variable_scope": "environment"
+}
+

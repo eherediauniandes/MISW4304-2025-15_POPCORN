@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    container_name: flask_blacklist_api
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg2://postgres:postgres@db:5432/appdb
+      DB_HOST: db
+      DB_PORT: "5432"
+      JWT_SECRET_KEY: "clave-super-secreta"
+      STATIC_JWT_TOKEN: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoic3RhdGljLXVzZXIiLCJyb2xlIjoiYWRtaW4ifQ.6bUHdYJk1cRnn-SVZEXAMPLEpR0fZ2mJb_YWbl8pW1lM
+      FLASK_ENV: production
+
+  db:
+    image: postgres:16
+    container_name: postgres_appdb
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: appdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d appdb -h 127.0.0.1 -p 5432"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:
