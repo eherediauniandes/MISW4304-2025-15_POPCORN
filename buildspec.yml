@@ -58,17 +58,5 @@ phases:
 
 artifacts:
   files:
-    - '*.zip'
-  name: popcorn-deployment-artifact
-  discard-paths: no
-
-reports:
-  coverage-report:
-    files:
-      - 'htmlcov/index.html'
-    file-format: HTML
-
-cache:
-  paths:
-    - '/root/.cache/pip/**/*'
+    - '**/*'
 
