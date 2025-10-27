@@ -1,0 +1,74 @@
+version: 0.2
+
+# AWS CodeBuild buildspec para CI Pipeline
+# Este archivo define las fases de construcción para integración continua
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.10
+    commands:
+      - echo "📦 Instalando dependencias..."
+      - python --version
+      - pip --version
+      - pip install --upgrade pip
+      - pip install -r requirements.txt
+      - echo "✅ Dependencias instaladas correctamente"
+
+  pre_build:
+    commands:
+      - echo "🧪 Ejecutando pruebas unitarias..."
+      - echo "Configuración de entorno de testing..."
+      - export FLASK_ENV=testing
+      - export DATABASE_URL=sqlite:///:memory:
+      - export JWT_SECRET_KEY=test-secret-key
+      - export STATIC_JWT_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoic3RhdGljLXVzZXIiLCJyb2xlIjoiYWRtaW4ifQ.6bUHdYJk1cRnn-SVZEXAMPLEpR0fZ2mJb_YWbl8pW1lM
+      - echo "Ejecutando tests con pytest..."
+      - pytest tests/ -v --tb=short
+      - echo "Generando reporte de cobertura..."
+      - coverage run -m pytest tests/
+      - coverage report
+      - coverage html
+      - echo "✅ Todas las pruebas pasaron exitosamente"
+
+  build:
+    commands:
+      - echo "🏗️ Generando artefacto de deployment..."
+      - echo "Limpiando archivos temporales..."
+      - find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+      - find . -type f -name "*.pyc" -delete 2>/dev/null || true
+      - find . -type f -name "*.pyo" -delete 2>/dev/null || true
+      - find . -type f -name ".DS_Store" -delete 2>/dev/null || true
+      - echo "Creando paquete ZIP para Elastic Beanstalk..."
+      - ARTIFACT_NAME="popcorn-app-$(date +%Y%m%d-%H%M%S).zip"
+      - zip -r $ARTIFACT_NAME application.py requirements.txt setup.cfg app/ .ebextensions/ -x "*.pyc" "*__pycache__*" "*.pyo" "*.log" ".DS_Store"
+      - echo "Verificando contenido del artefacto..."
+      - unzip -l $ARTIFACT_NAME | head -20
+      - echo "✅ Artefacto generado: $ARTIFACT_NAME"
+      - ls -lh $ARTIFACT_NAME
+
+  post_build:
+    commands:
+      - echo "🎉 Build completado exitosamente!"
+      - echo "Resumen del build:"
+      - echo "  - Tests ejecutados: ✅"
+      - echo "  - Cobertura generada: ✅"
+      - echo "  - Artefacto creado: ✅"
+      - echo "Pipeline de CI finalizado correctamente"
+
+artifacts:
+  files:
+    - '*.zip'
+  name: popcorn-deployment-artifact
+  discard-paths: no
+
+reports:
+  coverage-report:
+    files:
+      - 'htmlcov/index.html'
+    file-format: HTML
+
+cache:
+  paths:
+    - '/root/.cache/pip/**/*'
+
