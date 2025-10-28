@@ -33,19 +33,20 @@ phases:
 
   build:
     commands:
-      - echo "Generando artefacto de deployment..."
+      - echo "Preparando artefacto de deployment..."
       - echo "Limpiando archivos temporales..."
       - find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
       - find . -type f -name "*.pyc" -delete 2>/dev/null || true
       - find . -type f -name "*.pyo" -delete 2>/dev/null || true
       - find . -type f -name ".DS_Store" -delete 2>/dev/null || true
-      - echo "Creando paquete ZIP para Elastic Beanstalk..."
-      - ARTIFACT_NAME="popcorn-app-$(date +%Y%m%d-%H%M%S).zip"
-      - zip -r $ARTIFACT_NAME application.py requirements.txt setup.cfg app/ .ebextensions/ -x "*.pyc" "*__pycache__*" "*.pyo" "*.log" ".DS_Store"
-      - echo "Verificando contenido del artefacto..."
-      - unzip -l $ARTIFACT_NAME | head -20
-      - echo "Artefacto generado - $ARTIFACT_NAME"
-      - ls -lh $ARTIFACT_NAME
+      - find . -type d -name "htmlcov" -exec rm -rf {} + 2>/dev/null || true
+      - find . -type d -name ".pytest_cache" -exec rm -rf {} + 2>/dev/null || true
+      - find . -type d -name ".coverage" -delete 2>/dev/null || true
+      - echo "Verificando archivos que se incluiran en el artefacto..."
+      - ls -la
+      - echo "Contenido de app/"
+      - ls -la app/
+      - echo "Artefacto preparado para CodePipeline"
 
   post_build:
     commands:
@@ -58,6 +59,9 @@ phases:
 
 artifacts:
   files:
-    - '*.zip'
+    - application.py
+    - requirements.txt
+    - setup.cfg
+    - app/**/*
+    - .ebextensions/**/*
   name: popcorn-deployment-artifact
-  discard-paths: no
