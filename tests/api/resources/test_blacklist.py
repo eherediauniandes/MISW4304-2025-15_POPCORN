@@ -74,7 +74,7 @@ class TestBlacklistCreateResource(unittest.TestCase):
         # Verificaciones
         mock_process_request.assert_called_once_with(self.valid_data)
         
-        self.assertEqual(status_code, 200)
+        self.assertEqual(status_code, 201)
         self.assertIn('message', response)
         self.assertIn('data', response)
         self.assertEqual(response['message'], 'Email agregado a la lista negra exitosamente')
