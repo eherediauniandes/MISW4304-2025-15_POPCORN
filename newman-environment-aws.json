@@ -4,7 +4,7 @@
   "values": [
     {
       "key": "url",
-      "value": "http://MISW4304-2025-15POPCORN-env.eba-38ya8tke.us-east-1.elasticbeanstalk.com",
+      "value": "http://Test-2-final-env.eba-wmzcw8jy.us-east-1.elasticbeanstalk.com",
       "enabled": true
     },
     {
