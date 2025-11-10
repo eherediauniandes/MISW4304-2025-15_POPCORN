@@ -56,7 +56,7 @@ phases:
       - echo "✅ Autenticación exitosa en ECR"
       - echo ""
       - echo "Configurando variables de imagen Docker..."
-      - export IMAGE_REPO_NAME=${IMAGE_REPO_NAME:-popcorn-blacklist-api}
+      - export IMAGE_REPO_NAME=${IMAGE_REPO_NAME:-popcorn-app}
       - export IMAGE_TAG=${IMAGE_TAG:-latest}
       - export REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME
       - echo "Repository URI - $REPOSITORY_URI"
