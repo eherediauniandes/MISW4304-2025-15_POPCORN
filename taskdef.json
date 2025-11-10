@@ -8,7 +8,7 @@
   "containerDefinitions": [
     {
       "name": "popcorn-app",
-      "image": "<IMAGE1_NAME>",
+      "image": "<IMAGE_URI>",
       "essential": true,
       "portMappings": [
         {
