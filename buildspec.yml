@@ -95,10 +95,8 @@ phases:
       - echo "✅ imageDetail.json creado"
       - cat imageDetail.json
       - echo ""
-      - echo "Actualizando taskdef.json con la nueva imagen..."
-      - sed -i "s|<IMAGE1_NAME>|$REPOSITORY_URI:$IMAGE_TAG|g" taskdef.json
-      - sed -i "s|<AWS_ACCOUNT_ID>|$AWS_ACCOUNT_ID|g" taskdef.json
-      - echo "✅ taskdef.json actualizado"
+      - echo "📝 taskdef.json se mantiene con placeholders para CodeDeploy"
+      - echo "   CodeDeploy reemplazará <IMAGE1_NAME> automáticamente"
       - cat taskdef.json
       - echo ""
       - echo "=== RESUMEN DEL BUILD ==="
