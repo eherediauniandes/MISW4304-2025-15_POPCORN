@@ -21,27 +21,32 @@ for _ in range(30):
         import psycopg2
         conn = psycopg2.connect(url)
         conn.close()
+        print("✅ Conexión a DB exitosa")
         sys.exit(0)
-    except Exception:
+    except Exception as e:
+        print(f"⚠️  Intento de conexión falló: {e}")
         time.sleep(2)
-print("No se pudo conectar a la DB.", file=sys.stderr)
-sys.exit(1)
+print("⚠️  WARNING: No se pudo conectar a la DB después de 30 intentos. Continuando de todas formas...", file=sys.stderr)
+sys.exit(0)
 PY
   fi
 fi
 
 if [ -d "migrations" ]; then
   echo "Ejecutando migraciones Alembic..."
-  flask db upgrade || { echo "Fallo flask db upgrade"; exit 1; }
+  flask db upgrade || { echo "⚠️  WARNING: Fallo flask db upgrade, continuando..."; }
 else
   echo "Sin 'migrations', creando tablas con create_all()..."
   python - <<'PY'
 from app import create_app
 from app.api.extensions import db
 app = create_app()
-with app.app_context():
-    db.create_all()
-    print("Tablas creadas con create_all().")
+try:
+    with app.app_context():
+        db.create_all()
+        print("✅ Tablas creadas con create_all().")
+except Exception as e:
+    print(f"⚠️  WARNING: No se pudieron crear tablas: {e}")
 PY
 fi
 
