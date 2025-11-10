@@ -16,6 +16,10 @@ import psycopg2
 url = os.environ.get("DATABASE_URL")
 if not url:
     sys.exit(0)
+# Convertir URL de SQLAlchemy a formato psycopg2
+# postgresql+psycopg2://... -> postgresql://...
+if url.startswith("postgresql+psycopg2://"):
+    url = url.replace("postgresql+psycopg2://", "postgresql://")
 for _ in range(30):
     try:
         import psycopg2
