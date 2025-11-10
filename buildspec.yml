@@ -1,22 +1,33 @@
 version: 0.2
 
-# AWS CodeBuild buildspec para CI Pipeline
-# Este archivo define las fases de construcción para integración continua
+# AWS CodeBuild buildspec para CI/CD Pipeline
+# Este archivo define las fases de construcción para integración continua y despliegue continuo
+# Incluye: Tests unitarios, Build de imagen Docker, Push a ECR, y generación de artefactos para CodeDeploy
 
 phases:
   install:
     runtime-versions:
       python: 3.10
+      nodejs: 18
     commands:
-      - echo "Instalando dependencias..."
+      - echo "=== FASE INSTALL ==="
+      - echo "Instalando dependencias de Python..."
       - python --version
       - pip --version
       - pip install --upgrade pip
       - pip install -r requirements.txt
-      - echo "Dependencias instaladas correctamente"
+      - echo "✅ Dependencias de Python instaladas"
+      - echo ""
+      - echo "Instalando Newman para tests de API..."
+      - node --version
+      - npm --version
+      - npm install -g newman newman-reporter-htmlextra
+      - newman --version
+      - echo "✅ Newman instalado correctamente"
 
   pre_build:
     commands:
+      - echo "=== FASE PRE_BUILD ==="
       - echo "Ejecutando pruebas unitarias..."
       - echo "Configuracion de entorno de testing..."
       - export FLASK_ENV=testing
@@ -29,39 +40,78 @@ phases:
       - coverage run -m pytest tests/
       - coverage report
       - coverage html
-      - echo "Todas las pruebas pasaron exitosamente"
+      - echo "✅ Todas las pruebas pasaron exitosamente"
+      - echo ""
+      - echo "=== PREPARANDO DOCKER BUILD ==="
+      - echo "Autenticándose en Amazon ECR..."
+      - aws --version
+      - echo "Obteniendo región de AWS..."
+      - export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-east-1}
+      - export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+      - echo "AWS Account ID - $AWS_ACCOUNT_ID"
+      - echo "AWS Region - $AWS_DEFAULT_REGION"
+      - echo "Logging in to Amazon ECR..."
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - echo "✅ Autenticación exitosa en ECR"
+      - echo ""
+      - echo "Configurando variables de imagen Docker..."
+      - export IMAGE_REPO_NAME=${IMAGE_REPO_NAME:-popcorn-blacklist-api}
+      - export IMAGE_TAG=${IMAGE_TAG:-latest}
+      - export REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME
+      - echo "Repository URI - $REPOSITORY_URI"
+      - echo "Image Tag - $IMAGE_TAG"
 
   build:
     commands:
-      - echo "Preparando artefacto de deployment..."
-      - echo "Limpiando archivos temporales..."
-      - find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
-      - find . -type f -name "*.pyc" -delete 2>/dev/null || true
-      - find . -type f -name "*.pyo" -delete 2>/dev/null || true
-      - find . -type f -name ".DS_Store" -delete 2>/dev/null || true
-      - find . -type d -name "htmlcov" -exec rm -rf {} + 2>/dev/null || true
-      - find . -type d -name ".pytest_cache" -exec rm -rf {} + 2>/dev/null || true
-      - find . -type d -name ".coverage" -delete 2>/dev/null || true
-      - echo "Verificando archivos que se incluiran en el artefacto..."
-      - ls -la
-      - echo "Contenido de app/"
-      - ls -la app/
-      - echo "Artefacto preparado para CodePipeline"
+      - echo "=== FASE BUILD ==="
+      - echo "Construyendo imagen Docker para linux/amd64 (AWS Fargate)..."
+      - docker build --platform linux/amd64 -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      - echo "✅ Imagen Docker construida exitosamente"
+      - echo ""
+      - echo "Etiquetando imagen para ECR..."
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $REPOSITORY_URI:$IMAGE_TAG
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION
+      - echo "✅ Imagen etiquetada"
+      - echo ""
+      - echo "Listando imágenes Docker locales..."
+      - docker images
 
   post_build:
     commands:
-      - echo "Build completado exitosamente"
-      - echo "Resumen del build"
-      - echo "Tests ejecutados OK"
-      - echo "Cobertura generada OK"
-      - echo "Artefacto creado OK"
-      - echo "Pipeline de CI finalizado correctamente"
+      - echo "=== FASE POST_BUILD ==="
+      - echo "Subiendo imagen a Amazon ECR..."
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - docker push $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION
+      - echo "✅ Imagen subida exitosamente a ECR"
+      - echo ""
+      - echo "Generando imagedefinitions.json para CodeDeploy ECS..."
+      - printf '[{"name":"popcorn-app","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - echo "✅ imagedefinitions.json creado"
+      - cat imagedefinitions.json
+      - echo ""
+      - echo "Generando imageDetail.json para el pipeline..."
+      - printf '{"ImageURI":"%s"}' $REPOSITORY_URI:$IMAGE_TAG > imageDetail.json
+      - echo "✅ imageDetail.json creado"
+      - cat imageDetail.json
+      - echo ""
+      - echo "Actualizando taskdef.json con la nueva imagen..."
+      - sed -i "s|<IMAGE_URI>|$REPOSITORY_URI:$IMAGE_TAG|g" taskdef.json
+      - sed -i "s|<AWS_ACCOUNT_ID>|$AWS_ACCOUNT_ID|g" taskdef.json
+      - echo "✅ taskdef.json actualizado"
+      - cat taskdef.json
+      - echo ""
+      - echo "=== RESUMEN DEL BUILD ==="
+      - echo "✅ Tests ejecutados correctamente"
+      - echo "✅ Cobertura generada"
+      - echo "✅ Imagen Docker construida - $REPOSITORY_URI:$IMAGE_TAG"
+      - echo "✅ Imagen subida a ECR"
+      - echo "✅ Artefactos generados para CodeDeploy"
+      - echo "🎉 Pipeline de CI/CD completado exitosamente"
 
 artifacts:
   files:
-    - application.py
-    - requirements.txt
-    - setup.cfg
-    - app/**/*
-    - .ebextensions/**/*
-  name: popcorn-deployment-artifact
+    - imagedefinitions.json
+    - imageDetail.json
+    - taskdef.json
+    - appspec.yaml
+  name: popcorn-ecs-deployment-artifact
