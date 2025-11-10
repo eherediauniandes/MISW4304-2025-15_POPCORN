@@ -14,21 +14,27 @@ if command -v pg_isready >/dev/null 2>&1; then
 import os, time, sys
 import psycopg2
 url = os.environ.get("DATABASE_URL")
+print(f"🔍 DATABASE_URL original: {url}")
 if not url:
+    print("⚠️  DATABASE_URL no está configurada")
     sys.exit(0)
 # Convertir URL de SQLAlchemy a formato psycopg2
 # postgresql+psycopg2://... -> postgresql://...
+original_url = url
 if url.startswith("postgresql+psycopg2://"):
     url = url.replace("postgresql+psycopg2://", "postgresql://")
-for _ in range(30):
+    print(f"🔄 URL convertida de SQLAlchemy a psycopg2")
+print(f"🔍 URL para psycopg2: {url}")
+for i in range(30):
     try:
         import psycopg2
+        print(f"🔌 Intento {i+1}/30 de conexión a la BD...")
         conn = psycopg2.connect(url)
         conn.close()
         print("✅ Conexión a DB exitosa")
         sys.exit(0)
     except Exception as e:
-        print(f"⚠️  Intento de conexión falló: {e}")
+        print(f"⚠️  Intento {i+1}/30 falló: {e}")
         time.sleep(2)
 print("⚠️  WARNING: No se pudo conectar a la DB después de 30 intentos. Continuando de todas formas...", file=sys.stderr)
 sys.exit(0)
@@ -42,15 +48,23 @@ if [ -d "migrations" ]; then
 else
   echo "Sin 'migrations', creando tablas con create_all()..."
   python - <<'PY'
+import os
+print(f"🔍 DATABASE_URL para create_all: {os.environ.get('DATABASE_URL')}")
+print(f"🔍 FLASK_ENV: {os.environ.get('FLASK_ENV')}")
 from app import create_app
 from app.api.extensions import db
+print("📦 Creando app Flask...")
 app = create_app()
+print(f"🔍 Config de la app - SQLALCHEMY_DATABASE_URI: {app.config.get('SQLALCHEMY_DATABASE_URI')}")
 try:
     with app.app_context():
+        print("🔨 Ejecutando db.create_all()...")
         db.create_all()
         print("✅ Tablas creadas con create_all().")
 except Exception as e:
     print(f"⚠️  WARNING: No se pudieron crear tablas: {e}")
+    import traceback
+    traceback.print_exc()
 PY
 fi
 
