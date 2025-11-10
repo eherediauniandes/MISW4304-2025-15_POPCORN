@@ -1,7 +1,8 @@
 # Dockerfile para AWS Fargate - Microservicio Blacklist API
 # Optimizado para producción con multi-stage build
 
-FROM python:3.10-slim
+# Usar imagen de Python de AWS ECR Public (sin rate limit)
+FROM public.ecr.aws/docker/library/python:3.10-slim
 
 WORKDIR /app
 
