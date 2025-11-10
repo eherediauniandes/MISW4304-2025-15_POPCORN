@@ -1,0 +1,86 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# CI/CD
+.github
+buildspec.yml
+appspec.yaml
+deploy-to-ecr.sh
+create-deployment-package.sh
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info
+dist
+build
+*.egg
+.pytest_cache
+.coverage
+htmlcov
+.tox
+.mypy_cache
+.ruff_cache
+
+# Virtual environments
+venv
+env
+ENV
+.venv
+
+# IDEs
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Documentation
+*.md
+!README.md
+docs
+
+# Tests
+tests
+*.test.py
+test_*.py
+
+# Logs
+*.log
+web.stdout.log
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Docker
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# AWS
+.ebextensions
+*.zip
+
+# Postman
+*.postman_collection.json
+newman-environment-*.json
+
+# Misc
+*.bak
+*.tmp
+*.temp
+.cache
+
