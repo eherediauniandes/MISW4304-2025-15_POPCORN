@@ -3,6 +3,7 @@ version: 0.2
 # AWS CodeBuild buildspec para CI/CD Pipeline
 # Este archivo define las fases de construcción para integración continua y despliegue continuo
 # Incluye: Tests unitarios, Build de imagen Docker, Push a ECR, y generación de artefactos para CodeDeploy
+# Última actualización: 2025-11-10 - Pipeline Blue/Green deployment funcionando
 
 phases:
   install:
