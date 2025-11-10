@@ -96,7 +96,7 @@ phases:
       - cat imageDetail.json
       - echo ""
       - echo "Actualizando taskdef.json con la nueva imagen..."
-      - sed -i "s|<IMAGE_URI>|$REPOSITORY_URI:$IMAGE_TAG|g" taskdef.json
+      - sed -i "s|<IMAGE1_NAME>|$REPOSITORY_URI:$IMAGE_TAG|g" taskdef.json
       - sed -i "s|<AWS_ACCOUNT_ID>|$AWS_ACCOUNT_ID|g" taskdef.json
       - echo "✅ taskdef.json actualizado"
       - cat taskdef.json
