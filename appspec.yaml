@@ -5,7 +5,7 @@ Resources:
       Properties:
         TaskDefinition: <TASK_DEFINITION>
         LoadBalancerInfo:
-          ContainerName: popcorn-app
+          ContainerName: contenedor-que-no-existe
           ContainerPort: 8000
         PlatformVersion: LATEST
 

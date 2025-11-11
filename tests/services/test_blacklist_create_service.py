@@ -254,7 +254,7 @@ class TestBlacklistCreateService(unittest.TestCase):
             
             # Verificaciones
             self.assertTrue(result['success'])
-            self.assertEqual(result['status_code'], 200)
+            self.assertEqual(result['status_code'], 201)
             self.assertEqual(result['message'], 'Email agregado a la lista negra exitosamente')
             self.assertEqual(result['data'], mock_blacklist)
     
