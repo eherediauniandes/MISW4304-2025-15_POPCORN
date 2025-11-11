@@ -1,0 +1,30 @@
+{
+    "taskDefinition": "popcorn-app:8",
+    "cluster": "cluster-popcorn",
+    "loadBalancers": [
+        {
+            "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:442042525047:targetgroup/target-group-1/c4de2faaf6fa0b13",
+            "containerName": "popcorn-app",
+            "containerPort": 8000
+        }
+    ],
+    "desiredCount": 1,
+    "launchType": "FARGATE",
+    "schedulingStrategy": "REPLICA",
+    "deploymentController": {
+        "type": "CODE_DEPLOY"
+    },
+    "networkConfiguration": {
+        "awsvpcConfiguration": {
+            "subnets": [
+                "subnet-031df1a4e96c948c8",
+                "subnet-01a57a95198cc9a2f"
+            ],
+            "securityGroups": [
+                "sg-06c8ae6a49748a338"
+            ],
+            "assignPublicIp": "ENABLED"
+        }
+    }
+}
+
