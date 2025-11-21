@@ -3,7 +3,7 @@
     "cluster": "cluster-popcorn",
     "loadBalancers": [
         {
-            "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:442042525047:targetgroup/target-group-1/c4de2faaf6fa0b13",
+            "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:325661605180:loadbalancer/app/alb-popcorn/70e163042a0430ba",
             "containerName": "popcorn-app",
             "containerPort": 8000
         }
@@ -17,13 +17,13 @@
     "networkConfiguration": {
         "awsvpcConfiguration": {
             "subnets": [
-                "subnet-031df1a4e96c948c8",
-                "subnet-01a57a95198cc9a2f"
+                "subnet-0e3c8e730ca923bf5",
+                "subnet-0ba1e8037c81fa367"
             ],
             "securityGroups": [
-                "sg-06c8ae6a49748a338"
+                "sg-0916ce4cc744e4e2e"
             ],
-            "assignPublicIp": "ENABLED"
+            "assignPublicIp": "DISABLED"
         }
     }
 }
