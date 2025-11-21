@@ -112,7 +112,7 @@ artifacts:
     - imagedefinitions.json
     - imageDetail.json
     - taskdef.json
-    - appspec.json
+    - appspec.yaml
   discard-paths: yes
   exclude-paths:
     - appspec.yaml
