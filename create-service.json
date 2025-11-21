@@ -4,7 +4,7 @@
     "cluster": "cluster-popcorn",
     "loadBalancers": [
         {
-            "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:325661605180:loadbalancer/app/alb-popcorn/70e163042a0430ba",
+            "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:325661605180:targetgroup/target-group-1/ee956824ed97a8f7",
             "containerName": "popcorn-app",
             "containerPort": 8000
         }
