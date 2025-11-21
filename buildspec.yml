@@ -112,5 +112,5 @@ artifacts:
     - imagedefinitions.json
     - imageDetail.json
     - taskdef.json
-    - appspec.yaml
+    - appspec.json
   name: popcorn-ecs-deployment-artifact
