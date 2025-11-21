@@ -3,7 +3,7 @@ Resources:
   - TargetService:
       Type: AWS::ECS::Service
       Properties:
-        TaskDefinition: <TASK_DEFINITION>
+        TaskDefinition: arn:aws:ecs:us-east-1:325661605180:task-definition/popcorn-app:1
         LoadBalancerInfo:
           ContainerName: popcorn-app
           ContainerPort: 8000
