@@ -109,8 +109,8 @@ phases:
 
 artifacts:
   files:
+    - appspec.yaml
     - imagedefinitions.json
     - imageDetail.json
     - taskdef.json
-    - appspec.yaml
   name: popcorn-ecs-deployment-artifact
