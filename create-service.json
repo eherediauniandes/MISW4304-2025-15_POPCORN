@@ -1,5 +1,5 @@
 {
-    "taskDefinition": "popcorn-app:8",
+    "taskDefinition": "popcorn-app:1",
     "cluster": "cluster-popcorn",
     "loadBalancers": [
         {
