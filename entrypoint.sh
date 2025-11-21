@@ -69,4 +69,8 @@ PY
 fi
 
 echo "Levantando Gunicorn en :8000 con recarga automática..."
+if [ "${NEW_RELIC_VALIDATE:-false}" = "true" ]; then
+  echo "Validando configuración de New Relic..."
+  newrelic-admin validate-config "${NEW_RELIC_CONFIG_FILE:-/app/newrelic.ini}" || echo "⚠️  WARNING: newrelic-admin validate-config falló"
+fi
 exec newrelic-admin run-program gunicorn -b 0.0.0.0:8000 --reload "app:create_app()"
