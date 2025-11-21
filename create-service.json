@@ -1,6 +1,6 @@
 {
     "serviceName": "popcorn-service",
-    "taskDefinition": "popcorn-app:1",
+    "taskDefinition": "popcorn-app:2",
     "cluster": "cluster-popcorn",
     "loadBalancers": [
         {
