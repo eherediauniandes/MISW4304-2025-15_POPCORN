@@ -113,7 +113,4 @@ artifacts:
     - imageDetail.json
     - taskdef.json
     - appspec.yaml
-  discard-paths: yes
-  exclude-paths:
-    - appspec.yaml
   name: popcorn-ecs-deployment-artifact
