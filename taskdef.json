@@ -32,6 +32,14 @@
         {
           "name": "STATIC_JWT_TOKEN",
           "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoic3RhdGljLXVzZXIiLCJyb2xlIjoiYWRtaW4ifQ.6bUHdYJk1cRnn-SVZEXAMPLEpR0fZ2mJb_YWbl8pW1lM"
+        },
+        {
+          "name": "NEW_RELIC_CONFIG_FILE",
+          "value": "/app/newrelic.ini"
+        },
+        {
+          "name": "NEW_RELIC_LICENSE_KEY",
+          "value": "836A8EFBEFA98A709CADC224B8DE655E00C78F20757F86200DE28501CA2CD3D4"
         }
       ],
       "logConfiguration": {

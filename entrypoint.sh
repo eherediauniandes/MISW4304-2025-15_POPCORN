@@ -69,4 +69,4 @@ PY
 fi
 
 echo "Levantando Gunicorn en :8000 con recarga automática..."
-exec gunicorn -b 0.0.0.0:8000 --reload "app:create_app()"
+exec newrelic-admin run-program gunicorn -b 0.0.0.0:8000 --reload "app:create_app()"
