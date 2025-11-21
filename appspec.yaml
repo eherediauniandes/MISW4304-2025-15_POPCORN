@@ -5,7 +5,14 @@ Resources:
       Properties:
         TaskDefinition: <TASK_DEFINITION>
         LoadBalancerInfo:
-          ContainerName: popcorn-app
-          ContainerPort: 8000
+          TargetGroupPairInfoList:
+            - ProdTrafficRoute:
+                ListenerArns:
+                  - arn:aws:elasticloadbalancing:us-east-1:325661605180:targetgroup/target-group-1/ee956824ed97a8f7
+              TestTrafficRoute:
+                ListenerArns:
+                  - arn:aws:elasticloadbalancing:us-east-1:325661605180:targetgroup/target-group-2/9bfa6edde6387eed
+              TargetGroups:
+                - Name: target-group-1
+                - Name: target-group-2
         PlatformVersion: LATEST
-
