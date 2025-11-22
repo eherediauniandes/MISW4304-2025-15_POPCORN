@@ -40,7 +40,7 @@ with application.app_context():
         traceback.print_exc()
 
 if __name__ == "__main__":
-    # Para desarrollo local - APM
+    # Para desarrollo local - AP
     port = int(os.getenv('PORT', 8000))
     application.run(host='0.0.0.0', port=port)
 
