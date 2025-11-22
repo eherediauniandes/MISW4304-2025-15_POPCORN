@@ -8,7 +8,7 @@
   "containerDefinitions": [
     {
       "name": "popcorn-app",
-      "image": "325661605180.dkr.ecr.us-east-1.amazonaws.com/popcorn-app:latest",
+      "image": "<IMAGE1_NAME>",
       "essential": true,
       "portMappings": [
         {
@@ -53,4 +53,3 @@
     }
   ]
 }
-
