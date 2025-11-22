@@ -8,7 +8,7 @@
   "containerDefinitions": [
     {
       "name": "popcorn-app",
-      "image": "<IMAGE1_NAME>",
+      "image": "325661605180.dkr.ecr.us-east-1.amazonaws.com/popcorn-app:latest",
       "essential": true,
       "portMappings": [
         {
@@ -36,12 +36,12 @@
         {
           "name": "NEW_RELIC_CONFIG_FILE",
           "value": "/app/newrelic.ini"
-        },
-        {
-          "name": "NEW_RELIC_LICENSE_KEY",
-          "value": "KEY"
         }
       ],
+      "secrets": [{
+        "name": "NEW_RELIC_LICENSE_KEY",
+        "valueFrom": "arn:aws:ssm:us-east-1:325661605180:parameter/newrelic/license"
+      }],
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
