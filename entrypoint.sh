@@ -69,6 +69,13 @@ PY
 fi
 
 echo "Levantando Gunicorn en :8000 con recarga automática..."
+if [ "${NEW_RELIC_DEBUG_KEY:-false}" = "true" ]; then
+  python - <<'PY'
+import os
+key = os.environ.get("NEW_RELIC_LICENSE_KEY", "")
+print(f"🔎 NEW_RELIC_LICENSE_KEY len={len(key)} start='{key[:4]}' end='{key[-4:]}'")
+PY
+fi
 if [ "${NEW_RELIC_VALIDATE:-false}" = "true" ]; then
   echo "Validando configuración de New Relic..."
   newrelic-admin validate-config "${NEW_RELIC_CONFIG_FILE:-/app/newrelic.ini}" || echo "⚠️  WARNING: newrelic-admin validate-config falló"
