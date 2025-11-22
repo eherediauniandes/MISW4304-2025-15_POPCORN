@@ -17,7 +17,7 @@ services:
       STATIC_JWT_TOKEN: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoic3RhdGljLXVzZXIiLCJyb2xlIjoiYWRtaW4ifQ.6bUHdYJk1cRnn-SVZEXAMPLEpR0fZ2mJb_YWbl8pW1lM
       FLASK_ENV: production
       # New Relic Configuration (opcional para desarrollo local)
-      NEW_RELIC_LICENSE_KEY: "2EDE0C817854163612AA23FB3EC9A412CD3C1F31D7D4C22066FA11AB057C1C06"
+      NEW_RELIC_LICENSE_KEY: "e2a75d70ccc830fd593d25281a57782eFFFFNRAL"
       NEW_RELIC_APP_NAME: "popcorn-app-dev"
       NEW_RELIC_LOG: "stdout"
       NEW_RELIC_LOG_LEVEL: "info"
