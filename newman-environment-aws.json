@@ -4,7 +4,7 @@
   "values": [
     {
       "key": "url",
-      "value": "http://MISW4304-2025-15POPCORN-env.eba-38ya8tke.us-east-1.elasticbeanstalk.com",
+      "value": "http://lb-popcorn-app-74742984.us-east-1.elb.amazonaws.com",
       "enabled": true
     },
     {

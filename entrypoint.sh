@@ -69,4 +69,14 @@ PY
 fi
 
 echo "Levantando Gunicorn en :8000 con recarga automática..."
-exec gunicorn -b 0.0.0.0:8000 --reload "app:create_app()"
+echo "🔍 NEW_RELIC_LICENSE_KEY configurado: $(if [ -n "$NEW_RELIC_LICENSE_KEY" ]; then echo "SI"; else echo "NO"; fi)"
+echo "🔍 NEW_RELIC_APP_NAME: ${NEW_RELIC_APP_NAME:-popcorn-app}"
+
+# Ejecutar con New Relic si la license key está configurada
+if [ -n "$NEW_RELIC_LICENSE_KEY" ]; then
+  echo "🚀 Iniciando aplicación con New Relic monitoring..."
+  exec newrelic-admin run-program gunicorn -b 0.0.0.0:8000 --reload "app:create_app()"
+else
+  echo "⚠️  NEW_RELIC_LICENSE_KEY no configurado, iniciando sin New Relic..."
+  exec gunicorn -b 0.0.0.0:8000 --reload "app:create_app()"
+fi
