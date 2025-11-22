@@ -4,7 +4,7 @@
   "requiresCompatibilities": ["FARGATE"],
   "cpu": "256",
   "memory": "512",
-  "executionRoleArn": "<IMAGE1_NAME>",
+  "executionRoleArn": "arn:aws:iam::325661605180:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
       "name": "popcorn-app",
