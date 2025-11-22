@@ -39,7 +39,7 @@
         },
         {
           "name": "NEW_RELIC_LICENSE_KEY",
-          "value": "cc25d3f09b7dceb8998de5c3a97cefd9FFFFNRAL"
+          "value": "KEY"
         }
       ],
       "logConfiguration": {
